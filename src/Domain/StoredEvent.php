@@ -3,9 +3,9 @@
 namespace App\DDDBundle\Domain;
 
 use Doctrine\ORM\Mapping as ORM;
-use App\Repository\StoredEventRepository;
 
 #[ORM\Entity]
+#[ORM\Table(name: "event_store")]
 class StoredEvent
 {
     #[ORM\Id]
@@ -23,7 +23,7 @@ class StoredEvent
     private string $aggregateRootId;
 
     #[ORM\Column(type: "string", length: 32)]
-    private ?string $actorId;
+    private ?string $userId;
     
     #[ORM\Column(type: "boolean")]
     private string $published;
@@ -44,7 +44,7 @@ class StoredEvent
         $this->typeName        = $typeName;
         $this->eventBody       = $eventBody;
         $this->aggregateRootId = $aggregateRootId;
-        $this->actorId         = $actorId;
+        $this->userId         = $actorId;
         
         $this->occurredOn = new \DateTimeImmutable();
         
@@ -92,9 +92,9 @@ class StoredEvent
         return $this;
     }
 
-    public function getActorId(): ?string
+    public function getUserId(): ?string
     {
-        return $this->actorId;
+        return $this->userId;
     }
     
     public function markAsPublished(): void {

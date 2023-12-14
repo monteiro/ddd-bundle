@@ -2,10 +2,10 @@
 
 namespace App\DDDBundle\Application;
 
-use App\RentCar\Domain\Common\DomainEvent;
-use App\RentCar\Domain\Common\DomainEventDispatcherInterface;
-use App\RentCar\Domain\Common\StoredEvent;
-use App\RentCar\Domain\Common\StoredEventRepository;
+use App\DDDBundle\Domain\DomainEvent;
+use App\DDDBundle\Domain\DomainEventDispatcherInterface;
+use App\DDDBundle\Domain\StoredEvent;
+use App\DDDBundle\Domain\StoredEventRepository;
 use Symfony\Component\Serializer\SerializerInterface;
 
 final class DomainEventDispatcher implements DomainEventDispatcherInterface

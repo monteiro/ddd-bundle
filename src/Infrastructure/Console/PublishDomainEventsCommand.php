@@ -1,7 +1,8 @@
 <?php
 
-namespace App\DDDBundle\Domain;
+namespace App\DDDBundle\Infrastructure\Console;
 
+use App\DDDBundle\Domain\StoredEventRepository;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Command\SignalableCommandInterface;
@@ -12,7 +13,7 @@ use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 
 #[AsCommand(
-    name: 'app:domain:events:publish',
+    name: 'ddd:domain:events:publish',
     description: 'publish domain events to the transport',
 )]
 final class PublishDomainEventsCommand extends Command implements SignalableCommandInterface 

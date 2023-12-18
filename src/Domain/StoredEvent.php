@@ -36,13 +36,13 @@ class StoredEvent
     #[ORM\Column(type: 'datetime_immutable')]
     private \DateTimeImmutable $occurredOn;
 
-    public function __construct($id, $typeName, $eventBody, $aggregateRootId, ?string $actorId)
+    public function __construct($id, $typeName, $eventBody, $aggregateRootId, ?string $userId)
     {
         $this->id = $id;
         $this->typeName = $typeName;
         $this->eventBody = $eventBody;
         $this->aggregateRootId = $aggregateRootId;
-        $this->userId = $actorId;
+        $this->userId = $userId;
 
         $this->occurredOn = new \DateTimeImmutable();
 

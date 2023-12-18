@@ -16,11 +16,11 @@ final class Version20231218215833 extends AbstractMigration
 
     public function up(Schema $schema): void
     {
-        $this->addSql('CREATE INDEX IDX_BE4CE95B683C6017 ON event_store (published)');
+        $schema->getTable('event_store')->addIndex(['published'], 'IDX_BE4CE95B683C6017');
     }
 
     public function down(Schema $schema): void
     {
-        $this->addSql('DROP INDEX IDX_BE4CE95B683C6017 ON event_store');
+        $schema->getTable('event_store')->dropIndex('IDX_BE4CE95B683C6017');
     }
 }

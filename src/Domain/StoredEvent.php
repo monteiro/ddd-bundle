@@ -1,53 +1,51 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\DDDBundle\Domain;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Types\UuidType;
+use Symfony\Component\Uid\Uuid;
 
 #[ORM\Entity]
-#[ORM\Table(name: "event_store")]
+#[ORM\Index(columns: ['published'])]
+#[ORM\Table(name: 'event_store')]
 class StoredEvent
 {
     #[ORM\Id]
-    #[ORM\GeneratedValue(strategy: "NONE")]
-    #[ORM\Column(type: "string", length: 32)]
-    private string $id;
-    
-    #[ORM\Column(type: "string", length: 255)]
+    #[ORM\GeneratedValue(strategy: 'NONE')]
+    #[ORM\Column(type: UuidType::NAME, unique: true)]
+    private Uuid $id;
+
+    #[ORM\Column(type: 'string', length: 255)]
     private string $typeName;
-    
-    #[ORM\Column(type: "text")]
+
+    #[ORM\Column(type: 'text')]
     private string $eventBody;
-    
-    #[ORM\Column(type: "string", length: 255)]
+
+    #[ORM\Column(type: 'string', length: 255)]
     private string $aggregateRootId;
 
-    #[ORM\Column(type: "string", length: 32)]
+    #[ORM\Column(type: 'string', length: 32)]
     private ?string $userId;
-    
-    #[ORM\Column(type: "boolean")]
+
+    #[ORM\Column(type: 'boolean')]
     private string $published;
-    
-    #[ORM\Column(type: "datetime_immutable")]
+
+    #[ORM\Column(type: 'datetime_immutable')]
     private \DateTimeImmutable $occurredOn;
 
-    /**
-     * @param $id
-     * @param $typeName
-     * @param $eventBody
-     * @param $aggregateRootId
-     * @param string|null $actorId
-     */
     public function __construct($id, $typeName, $eventBody, $aggregateRootId, ?string $actorId)
     {
-        $this->id              = $id;
-        $this->typeName        = $typeName;
-        $this->eventBody       = $eventBody;
+        $this->id = $id;
+        $this->typeName = $typeName;
+        $this->eventBody = $eventBody;
         $this->aggregateRootId = $aggregateRootId;
-        $this->userId         = $actorId;
-        
+        $this->userId = $actorId;
+
         $this->occurredOn = new \DateTimeImmutable();
-        
+
         $this->published = false;
     }
 
@@ -96,8 +94,9 @@ class StoredEvent
     {
         return $this->userId;
     }
-    
-    public function markAsPublished(): void {
+
+    public function markAsPublished(): void
+    {
         $this->published = true;
     }
 }

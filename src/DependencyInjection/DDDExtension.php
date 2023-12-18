@@ -12,7 +12,7 @@ use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 
 class DDDExtension extends Extension implements PrependExtensionInterface
 {
-    private const CONFIG_PATH = __DIR__ . '/../Resources/config';
+    private const CONFIG_PATH = __DIR__.'/../Resources/config';
 
     public function load(array $configs, ContainerBuilder $container): void
     {
@@ -33,17 +33,17 @@ class DDDExtension extends Extension implements PrependExtensionInterface
                     'ddd' => [
                         'is_bundle' => false,
                         'type' => 'attribute',
-                        'dir' => __DIR__ . '/../Domain',
+                        'dir' => __DIR__.'/../Domain',
                         'prefix' => 'App\DDDBundle\Domain',
                         'alias' => 'ddd',
                     ],
                 ],
             ],
         ]);
-        
+
         $container->prependExtensionConfig('doctrine_migrations', [
             'migrations_paths' => [
-                'App\DDDBundle\Infrastructure\Persistence\Migrations' => '@DDDBundle/Infrastructure/Persistence/Migrations'
+                'App\DDDBundle\Infrastructure\Persistence\Migrations' => '@DDDBundle/Infrastructure/Persistence/Migrations',
             ],
         ]);
     }

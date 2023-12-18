@@ -11,7 +11,6 @@ class Configuration implements ConfigurationInterface
 {
     public function getConfigTreeBuilder(): TreeBuilder
     {
-        $treebuilder = new TreeBuilder('ddd');
-        return $treebuilder;
+        return new TreeBuilder('ddd');
     }
 }

@@ -1,16 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\DDDBundle\Infrastructure\Persistence;
 
 use App\DDDBundle\Domain\StoredEvent;
 use App\DDDBundle\Domain\StoredEventRepository;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
-use Symfony\Component\Uid\Uuid;
 
 /**
- * @method StoredEvent|null find($id, $lockMode = null, $lockVersion = null)
- * @method StoredEvent|null findOneBy(array $criteria, array $orderBy = null)
+ * @method null|StoredEvent find($id, $lockMode = null, $lockVersion = null)
+ * @method null|StoredEvent findOneBy(array $criteria, array $orderBy = null)
  * @method StoredEvent[]    findAll()
  * @method StoredEvent[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
@@ -19,11 +20,6 @@ class DoctrineStoredEventRepository extends ServiceEntityRepository implements S
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, StoredEvent::class);
-    }
-    
-    public function nextIdentity(): string
-    {
-        return Uuid::v4()->toRfc4122();
     }
 
     /**
@@ -36,7 +32,8 @@ class DoctrineStoredEventRepository extends ServiceEntityRepository implements S
             ->orderBy('r.occurredOn', 'ASC')
             ->setMaxResults($batchSize)
             ->getQuery()
-            ->getResult();
+            ->getResult()
+        ;
     }
 
     public function save(StoredEvent $storedEvent): void

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\DDDBundle\Domain;
 
 interface DomainEventDispatcherInterface

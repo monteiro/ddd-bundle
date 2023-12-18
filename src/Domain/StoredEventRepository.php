@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\DDDBundle\Domain;
 
 interface StoredEventRepository
@@ -10,8 +12,6 @@ interface StoredEventRepository
      * @return array<StoredEvent>
      */
     public function nextUnpublishEvents(int $batchSize): array;
-    
-    public function nextIdentity(): string;
-    
+
     public function save(StoredEvent $storedEvent): void;
 }

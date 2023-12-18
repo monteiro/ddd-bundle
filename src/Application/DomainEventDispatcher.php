@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\DDDBundle\Application;
 
 use App\DDDBundle\Domain\DomainEvent;
@@ -7,6 +9,7 @@ use App\DDDBundle\Domain\DomainEventDispatcherInterface;
 use App\DDDBundle\Domain\StoredEvent;
 use App\DDDBundle\Domain\StoredEventRepository;
 use Symfony\Component\Serializer\SerializerInterface;
+use Symfony\Component\Uid\Uuid;
 
 final class DomainEventDispatcher implements DomainEventDispatcherInterface
 {
@@ -27,12 +30,13 @@ final class DomainEventDispatcher implements DomainEventDispatcherInterface
     public function dispatchAll(array $domainEvents): void
     {
         foreach ($domainEvents as $domainEvent) {
-            $this->storedEventRepository->append(new StoredEvent(
-                $this->storedEventRepository->nextIdentity(),
-                get_class($domainEvent),
-                $this->serializer->serialize($domainEvent, 'json'),
-                $domainEvent->getAggregateRootId(),
-                $domainEvent->getActorId(),
+            $this->storedEventRepository->append(
+                new StoredEvent(
+                    Uuid::v7(),
+                    \get_class($domainEvent),
+                    $this->serializer->serialize($domainEvent, 'json'),
+                    $domainEvent->getAggregateRootId(),
+                    $domainEvent->getActorId(),
                 )
             );
         }

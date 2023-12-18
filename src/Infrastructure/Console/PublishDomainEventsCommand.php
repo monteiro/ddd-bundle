@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\DDDBundle\Infrastructure\Console;
 
 use App\DDDBundle\Domain\StoredEventRepository;
@@ -16,7 +18,7 @@ use Symfony\Component\Serializer\SerializerInterface;
     name: 'ddd:domain:events:publish',
     description: 'publish domain events to the transport',
 )]
-final class PublishDomainEventsCommand extends Command implements SignalableCommandInterface 
+final class PublishDomainEventsCommand extends Command implements SignalableCommandInterface
 {
     private const DEFAULT_BATCH_SIZE = 10;
     private const WAIT_SECONDS = 2;
@@ -24,7 +26,7 @@ final class PublishDomainEventsCommand extends Command implements SignalableComm
     private StoredEventRepository $storedEventRepository;
     private SerializerInterface $serializer;
     private MessageBusInterface $eventBus;
-    
+
     private bool $shouldStop = false;
 
     public function __construct(
@@ -39,23 +41,39 @@ final class PublishDomainEventsCommand extends Command implements SignalableComm
         $this->eventBus = $eventBus;
     }
 
-    protected function configure()
+    public function getSubscribedSignals(): array
+    {
+        return [
+            SIGINT,
+            SIGTERM,
+        ];
+    }
+
+    public function handleSignal(int $signal, false|int $previousExitCode = 0): false|int
+    {
+        $this->shouldStop = true;
+
+        return false;
+    }
+
+    protected function configure(): void
     {
         $this
-            ->addArgument('batchSize', InputArgument::OPTIONAL, 'batch size', self::DEFAULT_BATCH_SIZE);
+            ->addArgument('batchSize', InputArgument::OPTIONAL, 'batch size', self::DEFAULT_BATCH_SIZE)
+        ;
     }
-    
+
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $batchSize = $input->getArgument('batchSize');
-        
+
         while (true) {
             $output->writeln('listening to new events...');
-            
+
             if ($this->shouldStop) {
                 break;
             }
-            
+
             $storedEvents = $this->storedEventRepository->nextUnpublishEvents($batchSize);
             foreach ($storedEvents as $storedEvent) {
                 $domainEvent = $this->serializer->deserialize($storedEvent->getEventBody(), $storedEvent->getTypeName(), 'json');
@@ -68,22 +86,7 @@ final class PublishDomainEventsCommand extends Command implements SignalableComm
 
             sleep(self::WAIT_SECONDS);
         }
-        
+
         return self::SUCCESS;
-    }
-
-    public function getSubscribedSignals(): array
-    {
-        return [
-            SIGINT,
-            SIGTERM,
-        ];
-    }
-
-    public function handleSignal(int $signal, false|int $previousExitCode = 0): int|false
-    {
-        $this->shouldStop = true;
-
-        return false;
     }
 }

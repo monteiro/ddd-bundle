@@ -83,7 +83,7 @@ final class PublishDomainEventsCommand extends Command implements SignalableComm
 
                 $this->storedEventRepository->save($storedEvent);
 
-                $output->writeln(sprintf('dispatched event "%s" with body "%s"', $storedEvent->getTypeName(), $storedEvent->getEventBody()));
+                $output->writeln(sprintf('dispatched event "%s""', $storedEvent->getTypeName()));
             }
 
             sleep(self::WAIT_SECONDS);

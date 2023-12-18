@@ -17,3 +17,59 @@ changes when you start on your application using domain events. You want to reac
 - Have interfaces for domain events that will allow to save them in the database (following the outbox pattern).
 - Have a separated repository that will use this bundle to test all the behavior in a realtime application.
 
+## Instalation
+
+```bash
+composer require monteiro/ddd-bundle
+```
+
+You also need to execute the migrations needed to create the "event_store" table.
+The event store table will make sure by using the outbox pattern that all events will be saved in the database in the
+same transaction as the entity changes.
+
+```bash
+bin/console doctrine:migrations:migrate
+```
+
+## Usage
+
+### Publishing domain events
+
+```bash
+bin/console ddd:domain:events:publish
+```
+
+### Consuming domain events
+
+In order to consume domain events published by other services, you need to create a handler.
+The best component for this will be the messenger component. You can create a handler to be consumed for the domain event.
+
+Example of a messenger.yaml configuration:
+
+```yaml
+framework:
+    messenger:        
+        default_bus: command.bus
+        buses:
+            command.bus:
+                middleware:
+                  - doctrine_transaction
+            event.bus:
+                # the 'allow_no_handlers' middleware allows to have no handler                
+                default_middleware: allow_no_handlers
+        transports:          
+            async: '%env(MESSENGER_TRANSPORT_DSN)%'
+            failed: 'doctrine://default?queue_name=failed'
+            sync: 'sync://'
+
+        routing:
+            App\RentCar\Domain\Model\Car\CarWasCreated: async
+            App\RentCar\Domain\Model\Customer\CustomerWasCreated: async
+            App\RentCar\Domain\Model\Reservation\ReservationWasCreated: async
+            App\RentCar\Domain\Model\Reservation\ReservationWasCancelled: async
+```
+
+## Demo project
+
+You can try out the demo project: https://github.com/monteiro/rent-car-ddd
+Which uses the bundle and has some common DDD pattern examples.

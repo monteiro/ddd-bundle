@@ -35,6 +35,11 @@ bin/console doctrine:migrations:migrate
 
 ### Publishing domain events
 
+When we save a change in an entity, normally we notify other services or handlers that something happened.
+We save the event in the database in an event store table, and then we publish the event to the message bus.
+
+The console command used to publish the domain events to the message bus (e.g. rabbitmq, kafka, doctrine, etc) is:
+
 ```bash
 bin/console ddd:domain:events:publish
 ```

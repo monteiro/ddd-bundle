@@ -31,7 +31,7 @@ class StoredEvent
     private ?string $userId;
 
     #[ORM\Column(type: 'boolean')]
-    private string $published;
+    private bool $published;
 
     #[ORM\Column(type: 'datetime_immutable')]
     private \DateTimeImmutable $occurredOn;
@@ -49,7 +49,7 @@ class StoredEvent
         $this->published = false;
     }
 
-    public function getId(): string
+    public function getId(): Uuid
     {
         return $this->id;
     }

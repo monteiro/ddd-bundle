@@ -16,7 +16,7 @@ return (new PhpCsFixer\Config())
         '@PHP74Migration' => true,
         '@PHP74Migration:risky' => true,
         '@PhpCsFixer' => true,
-        '@PhpCsFixer:risky' => true
+        '@PhpCsFixer:risky' => true,
     ])
     ->setFinder($finder)
 ;

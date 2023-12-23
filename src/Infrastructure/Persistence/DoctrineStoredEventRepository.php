@@ -40,6 +40,8 @@ class DoctrineStoredEventRepository extends ServiceEntityRepository implements S
     {
         $this->getEntityManager()->persist($storedEvent);
         $this->getEntityManager()->flush();
+
+        $this->getEntityManager()->clear();
     }
 
     public function append(StoredEvent $storedEvent): void

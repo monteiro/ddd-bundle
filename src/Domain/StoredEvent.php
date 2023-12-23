@@ -38,7 +38,7 @@ class StoredEvent
 
     public function __construct($id, $typeName, $eventBody, $aggregateRootId, ?string $userId)
     {
-        $this->id        = $id;
+        $this->id = $id;
         $this->eventName = $typeName;
         $this->eventBody = $eventBody;
         $this->aggregateRootId = $aggregateRootId;
@@ -78,7 +78,7 @@ class StoredEvent
     {
         $this->published = true;
     }
-    
+
     public function getOccurredOn(): \DateTimeImmutable
     {
         return $this->occurredOn;

@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\DDDBundle\Infrastructure\Persistence;
 
-use App\DDDBundle\Domain\StoredEvent;
 use App\DDDBundle\Domain\StoredEventRepository;
+use App\DDDBundle\Entity\StoredEvent;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 

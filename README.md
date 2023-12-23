@@ -78,3 +78,14 @@ framework:
 
 You can try out the demo project: https://github.com/monteiro/rent-car-ddd
 Which uses the bundle and has some common DDD pattern examples.
+
+## Install
+
+In order to install we need to execute the following commands:
+
+```bash
+composer require monteiro/ddd-bundle
+bin/console make:migration
+bin/console doctrine:migrations:migrate
+```
+We need a new migration because we will create the "event_store" table which will store all the events published by our entities.

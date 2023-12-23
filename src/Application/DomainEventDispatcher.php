@@ -6,8 +6,8 @@ namespace App\DDDBundle\Application;
 
 use App\DDDBundle\Domain\DomainEvent;
 use App\DDDBundle\Domain\DomainEventDispatcherInterface;
-use App\DDDBundle\Domain\StoredEvent;
 use App\DDDBundle\Domain\StoredEventRepository;
+use App\DDDBundle\Entity\StoredEvent;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Uid\Uuid;
 

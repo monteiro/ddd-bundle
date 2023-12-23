@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\DDDBundle\Domain;
 
+use App\DDDBundle\Entity\StoredEvent;
+
 interface StoredEventRepository
 {
     public function append(StoredEvent $storedEvent): void;

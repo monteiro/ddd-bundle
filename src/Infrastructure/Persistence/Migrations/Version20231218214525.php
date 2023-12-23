@@ -21,7 +21,7 @@ final class Version20231218214525 extends AbstractMigration
     {
         $eventStore = $schema->createTable('event_store');
         $eventStore->addColumn('id', 'uuid', ['length' => 36]);
-        $eventStore->addColumn('type_name', 'string');
+        $eventStore->addColumn('event_name', 'string');
         $eventStore->addColumn('event_body', 'json');
         $eventStore->addColumn('aggregate_root_id', 'string');
         $eventStore->addColumn('user_id', 'string');

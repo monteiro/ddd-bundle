@@ -19,7 +19,7 @@ class StoredEvent
     private Uuid $id;
 
     #[ORM\Column(type: 'string', length: 255)]
-    private string $typeName;
+    private string $eventName;
 
     #[ORM\Column(type: 'text')]
     private string $eventBody;
@@ -38,8 +38,8 @@ class StoredEvent
 
     public function __construct($id, $typeName, $eventBody, $aggregateRootId, ?string $userId)
     {
-        $this->id = $id;
-        $this->typeName = $typeName;
+        $this->id        = $id;
+        $this->eventName = $typeName;
         $this->eventBody = $eventBody;
         $this->aggregateRootId = $aggregateRootId;
         $this->userId = $userId;
@@ -54,16 +54,9 @@ class StoredEvent
         return $this->id;
     }
 
-    public function getTypeName(): string
+    public function getEventName(): string
     {
-        return $this->typeName;
-    }
-
-    public function setTypeName(string $typeName): self
-    {
-        $this->typeName = $typeName;
-
-        return $this;
+        return $this->eventName;
     }
 
     public function getEventBody(): string
@@ -71,23 +64,9 @@ class StoredEvent
         return $this->eventBody;
     }
 
-    public function setEventBody(string $eventBody): self
-    {
-        $this->eventBody = $eventBody;
-
-        return $this;
-    }
-
     public function getAggregateRootId(): string
     {
         return $this->aggregateRootId;
-    }
-
-    public function setAggregateRootId(string $aggregateRootId): self
-    {
-        $this->aggregateRootId = $aggregateRootId;
-
-        return $this;
     }
 
     public function getUserId(): ?string
@@ -98,5 +77,10 @@ class StoredEvent
     public function markAsPublished(): void
     {
         $this->published = true;
+    }
+    
+    public function getOccurredOn(): \DateTimeImmutable
+    {
+        return $this->occurredOn;
     }
 }

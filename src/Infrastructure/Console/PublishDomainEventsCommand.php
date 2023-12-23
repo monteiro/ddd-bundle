@@ -76,14 +76,14 @@ final class PublishDomainEventsCommand extends Command implements SignalableComm
 
             $storedEvents = $this->storedEventRepository->nextUnpublishEvents($batchSize);
             foreach ($storedEvents as $storedEvent) {
-                $domainEvent = $this->serializer->deserialize($storedEvent->getEventBody(), $storedEvent->getTypeName(), 'json');
+                $domainEvent = $this->serializer->deserialize($storedEvent->getEventBody(), $storedEvent->getEventName(), 'json');
 
                 $this->eventBus->dispatch($domainEvent);
                 $storedEvent->markAsPublished();
 
                 $this->storedEventRepository->save($storedEvent);
 
-                $output->writeln(sprintf('dispatched event "%s""', $storedEvent->getTypeName()));
+                $output->writeln(sprintf('dispatched event "%s""', $storedEvent->getEventName()));
             }
 
             sleep(self::WAIT_SECONDS);

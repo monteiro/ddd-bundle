@@ -8,7 +8,7 @@ interface DomainEvent
 {
     public function getAggregateRootId(): string;
 
-    public function getActorId(): ?string;
+    public function getUserId(): ?string;
 
     public function getOccurredOn(): \DateTimeImmutable;
 }

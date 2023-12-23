@@ -60,27 +60,46 @@ final class PublishDomainEventsCommand extends Command implements SignalableComm
     {
         $this
             ->addArgument('batchSize', InputArgument::OPTIONAL, 'batch size', self::DEFAULT_BATCH_SIZE)
+            ->addArgument('limit', InputArgument::OPTIONAL, 'limit')
         ;
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $batchSize = $input->getArgument('batchSize');
+        $limit = $input->getArgument('limit');
+
+        $numEventsPublished = 0;
 
         while (true) {
-            $output->writeln('Listening to new events...');
+            $output->writeln('Listening to new domain events...');
 
             if ($this->shouldStop) {
                 break;
             }
 
+            if ($numEventsPublished === $limit) {
+                $this->shouldStop = true;
+                break;
+            }
+
             $storedEvents = $this->storedEventRepository->nextUnpublishEvents($batchSize);
             foreach ($storedEvents as $storedEvent) {
-                $domainEvent = $this->serializer->deserialize($storedEvent->getEventBody(), $storedEvent->getEventName(), 'json');
+                if ($numEventsPublished === $limit) {
+                    $this->shouldStop = true;
+                    break;
+                }
+
+                $domainEvent = $this->serializer->deserialize(
+                    $storedEvent->getEventBody(),
+                    $storedEvent->getEventName(),
+                    'json'
+                );
 
                 $this->eventBus->dispatch($domainEvent);
-                $storedEvent->markAsPublished();
+                ++$numEventsPublished;
 
+                $storedEvent->markAsPublished();
                 $this->storedEventRepository->save($storedEvent);
 
                 $output->writeln(sprintf('dispatched event "%s""', $storedEvent->getEventName()));

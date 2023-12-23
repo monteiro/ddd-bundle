@@ -21,7 +21,7 @@ class StoredEvent
     #[ORM\Column(type: 'string', length: 255)]
     private string $eventName;
 
-    #[ORM\Column(type: 'text')]
+    #[ORM\Column(type: 'json')]
     private string $eventBody;
 
     #[ORM\Column(type: 'string', length: 255)]
@@ -36,16 +36,14 @@ class StoredEvent
     #[ORM\Column(type: 'datetime_immutable')]
     private \DateTimeImmutable $occurredOn;
 
-    public function __construct($id, $typeName, $eventBody, $aggregateRootId, ?string $userId)
+    public function __construct(UUid $id, string $eventName, string $eventBody, string $aggregateRootId, ?string $userId)
     {
         $this->id = $id;
-        $this->eventName = $typeName;
+        $this->eventName = $eventName;
         $this->eventBody = $eventBody;
         $this->aggregateRootId = $aggregateRootId;
         $this->userId = $userId;
-
         $this->occurredOn = new \DateTimeImmutable();
-
         $this->published = false;
     }
 
@@ -82,5 +80,10 @@ class StoredEvent
     public function getOccurredOn(): \DateTimeImmutable
     {
         return $this->occurredOn;
+    }
+
+    public function isPublished(): bool
+    {
+        return $this->published;
     }
 }

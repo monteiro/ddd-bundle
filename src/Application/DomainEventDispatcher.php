@@ -36,7 +36,7 @@ final class DomainEventDispatcher implements DomainEventDispatcherInterface
                     \get_class($domainEvent),
                     $this->serializer->serialize($domainEvent, 'json'),
                     $domainEvent->getAggregateRootId(),
-                    $domainEvent->getActorId(),
+                    $domainEvent->getUserId(),
                 )
             );
         }

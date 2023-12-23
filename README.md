@@ -17,19 +17,16 @@ changes when you start on your application using domain events. You want to reac
 - Have interfaces for domain events that will allow to save them in the database (following the outbox pattern).
 - Have a separated repository that will use this bundle to test all the behavior in a realtime application.
 
-## Instalation
+## Install
+
+In order to install we need to execute the following commands:
 
 ```bash
 composer require monteiro/ddd-bundle
-```
-
-You also need to execute the migrations needed to create the "event_store" table.
-The event store table will make sure by using the outbox pattern that all events will be saved in the database in the
-same transaction as the entity changes.
-
-```bash
+bin/console make:migration
 bin/console doctrine:migrations:migrate
 ```
+The migration is needed because we will create the "event_store" table which will store all the events published by the entities.
 
 ## Usage
 
@@ -78,14 +75,3 @@ framework:
 
 You can try out the demo project: https://github.com/monteiro/rent-car-ddd
 Which uses the bundle and has some common DDD pattern examples.
-
-## Install
-
-In order to install we need to execute the following commands:
-
-```bash
-composer require monteiro/ddd-bundle
-bin/console make:migration
-bin/console doctrine:migrations:migrate
-```
-We need a new migration because we will create the "event_store" table which will store all the events published by our entities.
